@@ -3,15 +3,12 @@ import styled from 'styled-components';
 //Material UI
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
 import IconButton from '@material-ui/core/IconButton';
-import FilledInput from '@material-ui/core/FilledInput';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
@@ -33,24 +30,7 @@ const MordernForm = styled.form`
     width: 50vw;
     min-width: 300px;
 `;
-const ModernInput = styled.input`
-    min-width: 300px
-    max-width: 50vw;
-    height: 35px;
-    border-radius: 5px;
-    border: 2px solid black;
-    padding: 5px;
-    margin: 10px;
-`;
 
-const ModernButton = styled.button`
-    padding: 10px 25px;
-    border-radius: 5px;
-    outline: none;
-    border: none;
-    background: linear-gradient(to left, #FA0000, #CC2500);
-    cursor: pointer;
-`;
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
@@ -63,8 +43,8 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
     },
     textField: {
-        width: '100%',
-    },
+        minWidth: 300
+    }
 }));
 export default function Login() {
     const classes = useStyles();
