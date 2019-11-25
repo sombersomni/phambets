@@ -14,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Button from '@material-ui/core/Button';
 
 const LoginContainer = styled.div`
     display: flex;
@@ -29,7 +30,8 @@ const MordernForm = styled.form`
     align-items: center;
     justify-content: center;
     text-align: center;
-
+    width: 50vw;
+    min-width: 300px;
 `;
 const ModernInput = styled.input`
     min-width: 300px
@@ -61,7 +63,7 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
     },
     textField: {
-        width: 200,
+        width: '100%',
     },
 }));
 export default function Login() {
@@ -87,12 +89,15 @@ export default function Login() {
             <h1 style={{ textTransform: 'uppercase' }}>Pham Bet App</h1>
             <MordernForm onSubmit={handleLogin}>
                 <FormControl fullWidth className={classes.margin} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-amount">Username</InputLabel>
+                    <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
                     <OutlinedInput
-                        id="outlined-adornment-amount"
+                        ref={usernameRef}
+                        id="outlined-adornment-username"
                         value={values.amount}
                         onChange={e => handleChange(e, 'username')}
                         labelWidth={80}
+                        required
+                        
                     />
                 </FormControl>
                 <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
@@ -113,9 +118,11 @@ export default function Login() {
                             </InputAdornment>
                         }
                         labelWidth={70}
+                        required
+                        autoComplete="current-password"
                     />
                 </FormControl>
-                <ModernButton type="submit">Submit</ModernButton>
+                <Button type="submit" variant="contained" color="primary">Submit</Button>
             </MordernForm>
         </LoginContainer>
     )
