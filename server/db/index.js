@@ -5,7 +5,7 @@ const config = {
     host: 'localhost',
     user: 'postgres',
     database: 'phambets',
-    password: process.env.DB_PASSWORD || 'teddyrick',
+    password: process.env.DB_PASSWORD,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,

@@ -8,7 +8,7 @@ import user from './stores/User';
 //Contexts
 import UserContext from './contexts/UserContext';
 
-window.APP_ENV = 'development';
+window.APP_ENV = 'production';
 
 const MainApp = () => (
     <UserContext.Provider value={user}>
