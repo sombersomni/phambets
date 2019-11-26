@@ -1,4 +1,6 @@
 const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
+
 const config = {
     host: 'localhost',
     user: 'postgres',
@@ -12,17 +14,17 @@ const config = {
 function createDB() {
     const pool = new Pool(config);
     class PGDB {
-        static async findUser(username) {
-            const query = 'Select * From users Where username = $1';
+        static async addUser(username = '', email = '', password = '') {
+            const query = 'INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const values = [username, email, hashedPassword];
+            const res = await pool.query(query, values);
+        }
+        static async findUser(username = '') {
+            const query = 'SELECT id, username, password FROM users WHERE username = $1';
             const values = [username];
-            try {
-                const res = await pool.query(query, values);
-                return res.rows[0];
-            } catch(err) {
-                console.log(err.stack);
-                return null;
-            }
-
+            const res = await pool.query(query, values);
+            return res.rows[0];
         }
     }
     return PGDB;

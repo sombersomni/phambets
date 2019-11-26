@@ -16,7 +16,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 //Components
-import MessageAlert from '../components/MessageAlert';
+import MessageAlert from './MessageAlert';
 //Contexts
 import UserContext from '../contexts/UserContext';
 
@@ -51,14 +51,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function LoginForm() {
+function SignUpForm() {
     const user = useContext(UserContext);
     const classes = useStyles();
     const [values, setValues] = useState({
         username: '',
         password: '',
+        email: '',
+        passwordRepeat: '',
         showPassword: false,
+        showPasswordRepeat: false,
     })
+
     const [alert, setAlert] = useState({
         message: '',
         variant: 'success'
@@ -66,29 +70,26 @@ function LoginForm() {
 
     const [open, setOpen] = useState(false);
 
+    const [goToLogin, setGoToLogin] = useState(false);
+
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
+    const emailRef = useRef(null);
 
     function handleChange(e, name = '') {
         setValues({ ...values, [name]: e.target.value });
     }
+
     async function handleLogin(e) {
         e.preventDefault();
-        console.log('login in', values);
-        const { username, password } = values;
+        console.log('sign up', values);
+        const { username, email, password } = values;
         try {
-            const url = window.APP_ENV === 'development' ? 'http://localhost:8080/login' : '/login';
-            const response = await axios.post(url, { username, password});
+            const url = window.APP_ENV === 'development' ? 'http://localhost:8080/signup' : '/signup';
+            const response = await axios.post(url, { username, password, email });
             console.log(response);
             if (response.status === 200) {
-                const { id, username } = response.data;
-                const token = response.headers['x-auth-token'];
-                if (window.sessionStorage) {
-                    console.log('setting token', token);
-                    window.sessionStorage.setItem('token', token);
-                }
-                user.login(id, username, token);
-                console.log(user.loggedIn, 'user is logged in');
+                setGoToLogin(true);
             }
         } catch(err) {
             const { data } = err.response;
@@ -102,15 +103,16 @@ function LoginForm() {
         setValues({ 
             ...values,
             username: usernameRef.current.value || '',
+            email: emailRef.current.value || '',
             password: passwordRef.current.value || ''
         });
     }, []);
-
-    const validated = values.username.length > 0 && values.password.length > 0;
-
+    
+    const passwordMatches = values.passwordRepeat === values.password;
+    const validated = values.username.length > 0 && values.password.length > 0 && values.email.length > 0 && passwordMatches;
     return (
             <MordernForm onSubmit={handleLogin}>
-                { user.loggedIn ? <Redirect exact to="/bet" /> : null }
+                { goToLogin ? <Redirect exact to="/login" /> : null }
                 <FormControl fullWidth className={classes.margin} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
                     <OutlinedInput
@@ -119,6 +121,18 @@ function LoginForm() {
                         value={values.username}
                         onChange={e => handleChange(e, 'username')}
                         labelWidth={80}
+                        required
+                    />
+                </FormControl>
+                <FormControl fullWidth className={classes.margin} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
+                    <OutlinedInput
+                        ref={emailRef}
+                        id="outlined-adornment-email"
+                        type="email"
+                        value={values.email}
+                        onChange={e => handleChange(e, 'email')}
+                        labelWidth={45}
                         required
                     />
                 </FormControl>
@@ -145,6 +159,28 @@ function LoginForm() {
                         autoComplete="current-password"
                     />
                 </FormControl>
+                <FormControl className={clsx(classes.margin, classes.textField)} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password-repeat">Retype Password</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password-repeat"
+                        type={values.showPasswordRepeat ? 'text' : 'password'}
+                        value={values.passwordRepeat}
+                        onChange={e => handleChange(e, 'passwordRepeat')}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setValues({...values, showPasswordRepeat: !values.showPasswordRepeat})}
+                                >
+                                    {values.showPasswordRepeat ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        labelWidth={120}
+                        required
+                        error={!passwordMatches}
+                    />
+                </FormControl>
                 <Button 
                     disabled={!validated}
                     type="submit" variant="contained" color= "primary">Submit</Button>
@@ -153,4 +189,4 @@ function LoginForm() {
     )
 }
 
-export default observer(LoginForm);
+export default observer(SignUpForm);

@@ -1,17 +1,16 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const router = require('./routes');
-const cors = require('cors');
 require('dotenv').config();
+const router = require('./routes');
 //middleware
-const checkToken = require('./middleware/checkToken');
+const auth = require('./middleware/checkToken');
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(checkToken);
+app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'development') {
+    const cors = require('cors');
     app.use(cors());
 }
 
@@ -21,10 +20,15 @@ if (process.env.NODE_ENV === 'production') {
 app.use(router);
 //set up postgres driver database
 if (process.env.NODE_ENV === 'production') {
-     app.get('/*', (req, res) => {
+    app.get('/*', (req, res) => {
         res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
     });
 }
+
+app.post("/", auth, async (req, res) => {
+    //find an existing user
+    res.send(req.user);
+});
 
 app.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
