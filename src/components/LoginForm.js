@@ -94,10 +94,9 @@ function LoginForm() {
     useEffect(() => {
         usernameRef.current.focus();
     }, []);
-
+    //  { user.loggedIn ? <Redirect exact to="/bet" /> : null }
     return (
             <MordernForm onSubmit={handleLogin}>
-                { user.loggedIn ? <Redirect exact to="/bet" /> : null }
                 <FormControl fullWidth className={classes.margin} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
                     <OutlinedInput

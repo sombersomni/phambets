@@ -30,6 +30,7 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
+          <Redirect exact from="/" to="/login" />
           <Route exact path="/login" component={Login} />
           <Route exact path="/bet" component={Bet} />
         </Switch>
