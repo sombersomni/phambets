@@ -46,6 +46,7 @@ const FormContainer = styled.form`
     align-items: flex-start;
     justify-content: flex-start;
     text-align: left;
+    margin-bottom: 25px;
 `;
 
 const FormGroup = styled.div`
@@ -75,6 +76,7 @@ const BetFormContainer = styled.div`
         text-align: center;
         text-transform: capitalize;
         margin-top: 0px;
+        width: 100%;
     }
 `;
 function BetForm() {

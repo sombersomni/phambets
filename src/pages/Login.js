@@ -21,7 +21,6 @@ export default function Login() {
         <LoginContainer>
             <h1>Pham Bets App</h1>
             <LoginForm />
-            
         </LoginContainer>
     )
 }

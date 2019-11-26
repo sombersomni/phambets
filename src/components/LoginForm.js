@@ -82,16 +82,14 @@ function LoginForm() {
                 const token = response.headers['x-auth-token'];
                 user.login(id, username, token);
                 console.log(user.loggedIn, 'user is logged in');
-                setAlert({ message: 'You are now logged in!', variant: 'success' });
             }
         } catch(err) {
             console.log(err);
             setAlert({ message: 'Username or password was incorrect. Try again!', variant: 'error' });
         }
-        setOpen(true);
     }
 
-    const validated = values.username.length == 0 && values.password.length == 0;
+    const validated = values.username.length === 0 && values.password.length === 0;
 
     useEffect(() => {
         usernameRef.current.focus();
@@ -135,12 +133,7 @@ function LoginForm() {
                 </FormControl>
                 <Button 
                     disabled={validated}
-                    type="submit" variant="contained" color={validated ? "disable" : "primary"}>Submit</Button>
-                <MessageAlert 
-                    open={open}
-                    setOpen={setOpen}
-                    variant={alert.variant}
-                    message={alert.message} />
+                    type="submit" variant="contained" color= "primary">Submit</Button>
             </MordernForm>
     )
 }
