@@ -38,6 +38,7 @@ const CasinoContainer = styled.div`
     justify-content: flex-start;
     min-width: 300px;
     max-width: 50vw;
+    padding-bottom: 25px;
 `;
 export default function Bet() {
     return (
