@@ -31,7 +31,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/login" component={Login} />
-          <Route exact  path="/bet" component={Bet} />
+          <Route exact path="/bet" component={Bet} />
         </Switch>
       </Router>
     </div>
