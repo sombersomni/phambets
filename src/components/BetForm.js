@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 //Material UI
@@ -17,6 +18,7 @@ import MessageAlert from './MessageAlert';
 
 //Context
 import { AppUIContext } from '../contexts/AppUIContext';
+import UserContext from '../contexts/UserContext';
 //Store
 import { observer } from 'mobx-react';
 
@@ -51,7 +53,7 @@ const FormGroup = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    margin: 10px;
+    margin: 0px 10px;
 
     input, textarea, select {
         width: 100%;
@@ -78,6 +80,7 @@ const BetFormContainer = styled.div`
 function BetForm() {
     const classes = useStyles();
     const ui = useContext(AppUIContext);
+    const user = useContext(UserContext);
     const [open, setOpen] = useState(false);
     const [alert, setAlert] = useState({
        message: 'hurray',
@@ -94,9 +97,9 @@ function BetForm() {
         e.preventDefault();
         console.log('bet', bet);
         try {
-            const response = await axios.post('http://localhost:8080/bet', { ...bet, username: 'kartune' })
+            const response = await axios.post('http://localhost:8080/bet', { ...bet, username: user.username, id: user.id })
             console.log(response);
-            if (response.status == 200) {
+            if (response.status === 200) {
                 //show success message
                 setAlert({ message: 'Your bet was placed successfully' , variant: 'success' });
             }
@@ -112,7 +115,9 @@ function BetForm() {
     }
     return (
         <BetFormContainer>
-            <h2>Place Your Bet</h2>
+            { user.loggedIn ? null :
+            <Redirect exact to="/login" /> }
+            <h2>{user.username }, Place Your Bet</h2>
             <FormContainer
                 mobile={ui.mobile}
                 onSubmit={placeBet}>

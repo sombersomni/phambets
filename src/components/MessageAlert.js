@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import WarningIcon from '@material-ui/icons/Warning';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
@@ -18,7 +18,7 @@ const variantIcon = {
   info: InfoIcon,
 };
 
-const useStyles1 = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
   success: {
     backgroundColor: green[600],
   },
@@ -45,7 +45,7 @@ const useStyles1 = makeStyles(theme => ({
 }));
 
 function MySnackbarContentWrapper(props) {
-    const classes = useStyles1();
+    const classes = useStyles();
     const { className, message, onClose, variant, ...other } = props;
     const Icon = variantIcon[variant];
 
