@@ -12,6 +12,8 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+//Components
+import MessageAlert from './MessageAlert';
 
 //Context
 import { AppUIContext } from '../contexts/AppUIContext';
@@ -41,6 +43,7 @@ const FormContainer = styled.form`
     flex-direction: ${ props => props.mobile ? 'column' : 'row'};
     align-items: flex-start;
     justify-content: flex-start;
+    text-align: left;
 `;
 
 const FormGroup = styled.div`
@@ -53,12 +56,15 @@ const FormGroup = styled.div`
     input, textarea, select {
         width: 100%;
     }
+    
 `;
 
 const BetFormContainer = styled.div`
     display: flex;
     flex-direction: column;
-    text-align: left;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
     margin: 0px 10px;
     max-width: 50vw;
     min-width: 300px;
@@ -72,22 +78,33 @@ const BetFormContainer = styled.div`
 function BetForm() {
     const classes = useStyles();
     const ui = useContext(AppUIContext);
+    const [open, setOpen] = useState(false);
+    const [alert, setAlert] = useState({
+       message: 'hurray',
+       variant: 'success' 
+    });
     const [bet, setBet] = useState({
         type: 'money-line',
         amount: 5,
         numOfBets: 1,
     });
     const labelWidth = 80;
-    
+
     async function placeBet(e) {
         e.preventDefault();
         console.log('bet', bet);
         try {
-            const response =  await axios.post('http://localhost:8080/bet', { ...bet, username: 'kartune' })
+            const response = await axios.post('http://localhost:8080/bet', { ...bet, username: 'kartune' })
             console.log(response);
-        } catch(err) {
+            if (response.status == 200) {
+                //show success message
+                setAlert({ message: 'Your bet was placed successfully' , variant: 'success' });
+            }
+        } catch (err) {
             console.log(err);
+            setAlert({ message: "Couldn't place your bet, try again!" , variant: 'error' });
         }
+        setOpen(true);
     }
 
     function handleChange(e, name) {
@@ -153,6 +170,11 @@ function BetForm() {
                     <Button type="submit" variant="contained" color="primary">Place Bet</Button>
                 </FormGroup>
             </FormContainer>
+            <MessageAlert 
+                open={open}
+                setOpen={setOpen}
+                variant={alert.variant}
+                message={alert.message} />
         </BetFormContainer>
     )
 }
