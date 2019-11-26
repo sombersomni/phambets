@@ -18,13 +18,20 @@ function createDB() {
             const query = 'INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
             const hashedPassword = await bcrypt.hash(password, 10);
             const values = [username, email, hashedPassword];
-            const res = await pool.query(query, values);
+            await pool.query(query, values);
+            return;
         }
         static async findUser(username = '') {
             const query = 'SELECT id, username, password FROM users WHERE username = $1';
             const values = [username];
             const res = await pool.query(query, values);
             return res.rows[0];
+        }
+        static async placeBet(id, name = '', type = 'money-line', amount = 5, numOfBets = 1) {
+            const query = 'INSERT INTO bets(user_id, amount, num_of_bets, type, name) VALUES($1, $2, $3, $4, $5)';
+            const values = [id, amount, numOfBets, type, name];
+            await pool.query(query, values);
+            return;
         }
     }
     return PGDB;

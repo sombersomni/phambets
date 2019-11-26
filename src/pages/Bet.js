@@ -1,6 +1,9 @@
 import React from 'react';
 import BetForm from '../components/BetForm';
 import styled from 'styled-components';
+
+//Material UI
+import Button from '@material-ui/core/Button';
 //Context
 import { AppUIContext } from '../contexts/AppUIContext';
 //store
@@ -28,6 +31,14 @@ const BetContainer = styled.div`
     }
 `;
 
+const CasinoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 300px;
+    max-width: 50vw;
+`;
 export default function Bet() {
     return (
         <MainContainer>
@@ -35,8 +46,13 @@ export default function Bet() {
                 <AppUIContext.Provider value={appUI}>
                     <BetForm />
                 </AppUIContext.Provider>
-                <iframe src="https://www.google.com">
-                </iframe>   
+                <CasinoContainer>
+                    <h3>Visit Rivers Casino Sports below to find what you want to bet on</h3>
+                    <img src="https://riverscasinosports.com/betslip/logo.png" aria-label="riverscasinosports" />
+                    <a target="_blank" href="https://riverscasinosports.com/betslip-dev/#home">
+                        <Button variant="outlined" color="default">Visit Website</Button>
+                    </a>
+                </CasinoContainer>
             </BetContainer>
         </MainContainer>
     )

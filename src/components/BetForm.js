@@ -42,11 +42,18 @@ const useStyles = makeStyles(theme => ({
 
 const FormContainer = styled.form`
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 25px;
+`;
+
+const FormGroupContainer = styled.div`
+    display: flex;
     flex-direction: ${ props => props.mobile ? 'column' : 'row'};
     align-items: flex-start;
     justify-content: flex-start;
     text-align: left;
-    margin-bottom: 25px;
 `;
 
 const FormGroup = styled.div`
@@ -89,6 +96,7 @@ function BetForm() {
        variant: 'success' 
     });
     const [bet, setBet] = useState({
+        name: 'Rockets vs. Pistons',
         type: 'money-line',
         amount: 5,
         numOfBets: 1,
@@ -103,11 +111,13 @@ function BetForm() {
             console.log(response);
             if (response.status === 200) {
                 //show success message
-                setAlert({ message: 'Your bet was placed successfully' , variant: 'success' });
+                const { data } = response;
+                setAlert({ message: data , variant: 'success' });
             }
         } catch (err) {
             console.log(err);
-            setAlert({ message: "Couldn't place your bet, try again!" , variant: 'error' });
+            const { data } = err.response;
+            setAlert({ message: data, variant: 'error' });
         }
         setOpen(true);
     }
@@ -115,67 +125,74 @@ function BetForm() {
     function handleChange(e, name) {
         setBet({ ...bet, [name]: e.target.value });
     }
+
+    function calculateTotal() {
+        return parseFloat(bet.amount * bet.numOfBets).toFixed(2);
+    }
     return (
         <BetFormContainer>
             { user.loggedIn ? null :
             <Redirect exact to="/login" /> }
             <h2>{user.username }, Place Your Bet</h2>
             <FormContainer
-                mobile={ui.mobile}
                 onSubmit={placeBet}>
-                <FormGroup>
-                    <TextField
-                        id="outlined-multiline-static"
-                        label="Multiline"
-                        multiline
-                        rows="4"
-                        defaultValue="(ex. Rockets vs. Pistons)"
-                        className={classes.textField}
-                        margin="normal"
-                        variant="outlined"
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-outlined-label">
-                            Bet Type
-                        </InputLabel>
-                        <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            value={bet.type}
-                            onChange={e => handleChange(e, 'type')}
-                            labelWidth={labelWidth}
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value="money-line">Money Line</MenuItem>
-                            <MenuItem value="over-under">Over/Under</MenuItem>
-                            <MenuItem value="other">Other</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth className={classes.margin} variant="outlined">
-                        <InputLabel htmlFor="outlined-num-bets">Number of Bets</InputLabel>
-                        <OutlinedInput
-                            id="outlined-num-bets"
-                            value={bet.numOfBets}
-                            onChange={e => handleChange(e, 'numOfBets')}
-                            labelWidth={100}
+                <FormGroupContainer mobile={ui.mobile}>
+                    <FormGroup>
+                        <TextField
+                            id="outlined-multiline-static"
+                            label="Multiline"
+                            multiline
+                            rows="4"
+                            defaultValue="(ex. Rockets vs. Pistons)"
+                            className={classes.textField}
+                            margin="normal"
+                            variant="outlined"
+                            onChange={e => handleChange(e, 'name')}
                         />
-                    </FormControl>
-                    <FormControl fullWidth className={classes.margin} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-amount"
-                            value={bet.amount}
-                            onChange={e => handleChange(e, 'amount')}
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            labelWidth={60}
-                        />
-                    </FormControl>
-                    <Button type="submit" variant="contained" color="primary">Place Bet</Button>
-                </FormGroup>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-outlined-label">
+                                Bet Type
+                            </InputLabel>
+                            <Select
+                                labelId="demo-simple-select-outlined-label"
+                                id="demo-simple-select-outlined"
+                                value={bet.type}
+                                onChange={e => handleChange(e, 'type')}
+                                labelWidth={labelWidth}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value="money-line">Money Line</MenuItem>
+                                <MenuItem value="over-under">Over/Under</MenuItem>
+                                <MenuItem value="bet-slip">Bet Slip</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth className={classes.margin} variant="outlined">
+                            <InputLabel htmlFor="outlined-num-bets">Number of Bets</InputLabel>
+                            <OutlinedInput
+                                id="outlined-num-bets"
+                                value={bet.numOfBets}
+                                onChange={e => handleChange(e, 'numOfBets')}
+                                labelWidth={100}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth className={classes.margin} variant="outlined">
+                            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                value={bet.amount}
+                                onChange={e => handleChange(e, 'amount')}
+                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                labelWidth={60}
+                            />
+                        </FormControl>
+                    </FormGroup>
+                </FormGroupContainer>
+                <p>Total : ${calculateTotal()}</p>
+                <Button type="submit" variant="contained" color="primary">Place Bet</Button>
             </FormContainer>
             <MessageAlert 
                 open={open}
