@@ -30,6 +30,10 @@ const MordernForm = styled.form`
     text-align: center;
     width: 50vw;
     min-width: 300px;
+
+    input {
+        width: 100%;
+    }
 `;
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +48,8 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
     },
     textField: {
-        minWidth: 300
+        minWidth: 300,
+        width: '100%'
     }
 }));
 export default function Login() {

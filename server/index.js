@@ -14,9 +14,9 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 app.use(router);
 //set up postgres driver database
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-})
+// app.get('/*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+// })
 
 app.listen(PORT, () => {
     console.log(`server running on ${PORT}`);

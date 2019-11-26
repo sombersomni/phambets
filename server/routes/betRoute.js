@@ -1,9 +1,7 @@
 const router = require('express').Router();
 
-router.route('/login')
+router.route('/bet')
 .post((req, res) => {
     console.log(req.body);
-    res.send('login sucessful');
 })
-
 module.exports = router;

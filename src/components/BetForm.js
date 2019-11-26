@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 //Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -77,8 +78,16 @@ function BetForm() {
         numOfBets: 1,
     });
     const labelWidth = 80;
-    function placeBet(e) {
+    
+    async function placeBet(e) {
         e.preventDefault();
+        console.log('bet', bet);
+        try {
+            const response =  await axios.post('http://localhost:8080/bet', { ...bet, username: 'kartune' })
+            console.log(response);
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     function handleChange(e, name) {
