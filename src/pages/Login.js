@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 //Material UI
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -57,13 +58,22 @@ export default function Login() {
     function handleChange(e, name = '') {
         setValues({ ...values, [name]: e.target.value });
     }
-    function handleLogin(e) {
+    async function handleLogin(e) {
         e.preventDefault();
         console.log('login in', values);
+        const { username, password } = values;
+        try {
+            const response = await axios.post('http://localhost:8080/login', { username, password});
+            console.log(response);
+        } catch(err) {
+            console.log(err);
+        }
     }
+
     useEffect(() => {
         usernameRef.current.focus();
     }, []);
+
     return (
         <LoginContainer>
             <h1 style={{ textTransform: 'uppercase' }}>Pham Bet App</h1>
