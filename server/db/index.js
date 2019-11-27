@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 
 const config = {
-    host: 'localhost',
+    host: process.env.DB_HOST || 'localhost',
     user: 'postgres',
     database: 'phambets',
     password: process.env.DB_PASSWORD,
@@ -12,7 +12,7 @@ const config = {
 };
 
 function createDB() {
-    const pool = new Pool(config);
+    const pool = new Pool(process.env.NODE_ENV === 'development' ? config : { connectionString: process.env.DATABASE_URL });
     class PGDB {
         static async addUser(username = '', email = '', password = '') {
             const query = 'INSERT INTO users(username, email, password) VALUES($1, $2, $3)';
@@ -32,6 +32,20 @@ function createDB() {
             const values = [id, amount, numOfBets, type, name];
             await pool.query(query, values);
             return;
+        }
+        static async configureTables() {
+            const query = `
+            CREATE TABLE users (
+                id bigserial, 
+                username varchar(255) NOT NULL, 
+                email varchar(255) NOT NULL, 
+                password varchar(255) NOT NULL, 
+                is_admin boolean default false, 
+                created_at date DEFAULT CURRENT_TIMESTAMP, 
+                CONSTRAINT id_key PRIMARY KEY(id), 
+                CONSTRAINT username_unique UNIQUE(username), 
+                CONSTRAINT email_unique UNIQUE(email));`
+            await pool.query(query);
         }
     }
     return PGDB;

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const db = require('./db');
 require('dotenv').config();
 const router = require('./routes');
 //middleware
@@ -31,4 +32,5 @@ app.post("/", auth, async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`server running on ${PORT}`);
+    db.configureTables();
 });
