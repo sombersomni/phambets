@@ -24,7 +24,8 @@
     "styled-components": "^4.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./server",
+    "start:react": "react-scripts start",
     "start:dev": "nodemon ./server",
     "build": "react-scripts build",
     "test": "react-scripts test",
