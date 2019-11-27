@@ -27,7 +27,7 @@ const MordernForm = styled.form`
     justify-content: center;
     text-align: center;
     width: 50vw;
-    min-width: 300px;
+    min-width: 250px;
 
     input {
         width: 100%;
@@ -46,7 +46,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
     },
     textField: {
-        minWidth: 300,
         width: '100%'
     }
 }));

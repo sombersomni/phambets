@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { throttle } from 'lodash';
 //Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -103,7 +104,7 @@ function BetForm() {
     });
     const labelWidth = 80;
 
-    async function placeBet(e) {
+    const placeBet = async(e) => {
         e.preventDefault();
         console.log('bet', bet);
         try {
@@ -122,6 +123,8 @@ function BetForm() {
         setOpen(true);
     }
 
+    const tPlaceBet = throttle(placeBet, 5000, { leading: true });
+    console.log(tPlaceBet);
     function handleChange(e, name) {
         setBet({ ...bet, [name]: e.target.value });
     }
@@ -135,7 +138,7 @@ function BetForm() {
             <Redirect exact to="/login" /> }
             <h2>{user.username }, Place Your Bet</h2>
             <FormContainer
-                onSubmit={placeBet}>
+                onSubmit={tPlaceBet}>
                 <FormGroupContainer mobile={ui.mobile}>
                     <FormGroup>
                         <TextField

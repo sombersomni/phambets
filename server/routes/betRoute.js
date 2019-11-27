@@ -8,6 +8,7 @@ router.route('/bet')
     const { id, name, type, amount, numOfBets } = req.body;
     try {
         await db.placeBet(id, name, type, amount, numOfBets);
+        //email john with info
         res.send('Your bet was successfully placed!');
     } catch(err) {
         console.log(err);

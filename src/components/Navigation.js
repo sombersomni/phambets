@@ -49,7 +49,7 @@ function Navigation() {
     return (
         <NavContainer>
             <LinkContainer left={true}>
-                <Link to="/"><h3>PhamBets</h3></Link>
+                <Link to="/"><h3>Pham-Duel</h3></Link>
             </LinkContainer>
             <LinkContainer>
                 { !user.loggedIn ?
